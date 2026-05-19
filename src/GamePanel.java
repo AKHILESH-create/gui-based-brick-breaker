@@ -7,7 +7,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private boolean play = false;
 
     private int score = 0;
-    private int totalBricks = 21;
+    private int highScore = 0;
+    private int level = 1;
+    private int totalBricks;
 
     private Timer timer;
     private int delay = 8;
@@ -22,9 +24,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     private MapGenerator map;
 
+    //constructor
+
     public GamePanel() {
 
-        map = new MapGenerator(3,7);
+        startLevel();
 
         addKeyListener(this);
 
@@ -35,49 +39,66 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         timer.start();
     }
 
+    private void startLevel() {
+
+        int rows = 2 + level;
+        int cols = 5 + level;
+
+        map = new MapGenerator(rows, cols);
+
+        totalBricks = rows * cols;
+
+        ballPosX = 120;
+        ballPosY = 350;
+
+        ballXDir = -2;
+        ballYDir = -2;
+
+        playerX = 310;
+    }
+
     public void paint(Graphics g){
 
-        // background
+        // Main background
         g.setColor(Color.black);
         g.fillRect(1,1,692,592);
 
-        // bricks
+        // Pink top information bar
+        g.setColor(new Color(255,220,230));
+        g.fillRect(10,10,670,55);
+
+        g.setColor(Color.gray);
+
+        // Bottom line only
+        g.fillRect(20,580,650,3);
+        // Draw bricks
         map.draw((Graphics2D)g);
 
-        // borders
-        g.setColor(Color.yellow);
+        // Top information text
+        g.setColor(Color.black);
+        g.setFont(new Font("Calibri", Font.BOLD,24));
 
-        g.fillRect(0,0,3,592);
-        g.fillRect(0,0,692,3);
-        g.fillRect(691,0,3,592);
+        g.drawString("Level : " + level,80,45);
 
-        // score
-        g.setColor(Color.white);
-        g.setFont(new Font("serif",Font.BOLD,25));
-        g.drawString("Score : "+score,500,30);
+        g.drawString("Score : " + score,270,45);
 
-        // paddle
+        g.drawString("High Score : " + highScore,440,45);
+
+
+        // Paddle
         g.setColor(Color.green);
-        g.fillRect(playerX,550,100,8);
+        g.fillRoundRect(playerX,550,140,10,15,15);
 
-        // ball
-        g.setColor(Color.yellow);
-        g.fillOval(ballPosX,ballPosY,20,20);
+        // Ball
+        g.setColor(Color.red);
+        g.fillOval(ballPosX,ballPosY,30,30);
+
 
         // WIN
         if(totalBricks <= 0){
 
-            play = false;
-            ballXDir = 0;
-            ballYDir = 0;
-
-            g.setColor(Color.green);
-            g.setFont(new Font("serif",Font.BOLD,30));
-
-            g.drawString("You Won!",250,300);
-
-            g.setFont(new Font("serif",Font.BOLD,20));
-            g.drawString("Press Enter to Restart",220,350);
+            level++;
+            startLevel();
         }
 
         // GAME OVER
@@ -88,11 +109,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             ballYDir = 0;
 
             g.setColor(Color.red);
-            g.setFont(new Font("serif",Font.BOLD,30));
+            g.setFont(new Font("Calibri",Font.BOLD,30));
 
             g.drawString("Game Over",240,300);
 
-            g.setFont(new Font("serif",Font.BOLD,20));
+            g.setFont(new Font("Calibri",Font.BOLD,20));
             g.drawString("Press Enter to Restart",220,350);
         }
 
@@ -107,8 +128,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             ballPosY += ballYDir;
 
             // paddle collision
-            if(new Rectangle(ballPosX,ballPosY,20,20)
-                    .intersects(new Rectangle(playerX,550,100,8))){
+            if(new Rectangle(ballPosX,ballPosY,30,30)
+                    .intersects(new Rectangle(playerX,550,140,10))){
 
                 ballYDir = -ballYDir;
             }
@@ -134,15 +155,19 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                                 new Rectangle(
                                         ballPosX,
                                         ballPosY,
-                                        20,
-                                        20);
+                                        30,
+                                        30);
 
                         if(ballRect.intersects(rect)){
 
                             map.setBrickValue(0,i,j);
 
                             totalBricks--;
+
                             score +=5;
+                            if(score > highScore){
+                                highScore = score;
+                            }
 
                             ballYDir=-ballYDir;
 
@@ -155,10 +180,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             if(ballPosX<0)
                 ballXDir=-ballXDir;
 
-            if(ballPosY<0)
-                ballYDir=-ballYDir;
+            if(ballPosY<85)
+                ballYDir = -ballYDir;
 
-            if(ballPosX>670)
+            if(ballPosX>640)
                 ballXDir=-ballXDir;
         }
 
@@ -169,8 +194,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
         if(e.getKeyCode()==KeyEvent.VK_RIGHT){
 
-            if(playerX>=600)
-                playerX=600;
+            if(playerX >=530)
+                playerX = 530;
             else
                 moveRight();
         }
@@ -193,15 +218,15 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 ballPosX=120;
                 ballPosY=350;
 
-                ballXDir=-1;
+                ballXDir=-2;
                 ballYDir=-2;
 
                 playerX=310;
 
-                score=0;
-                totalBricks=21;
+                score = 0;
+                level = 1;
 
-                map=new MapGenerator(3,7);
+                startLevel();
 
                 repaint();
             }
@@ -210,14 +235,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void moveRight(){
 
-        play=true;
-        playerX+=20;
+        play = true;
+        playerX +=35;
     }
 
     public void moveLeft(){
 
-        play=true;
-        playerX-=20;
+        play = true;
+        playerX -=35;
     }
 
     public void keyReleased(KeyEvent e){}

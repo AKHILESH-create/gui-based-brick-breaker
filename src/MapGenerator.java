@@ -32,24 +32,47 @@ public class MapGenerator {
                 if (map[i][j] > 0) {
 
                     // Brick color
-                    g.setColor(Color.white);
+                    // Different colors for rows
 
-                    g.fillRect(
+                    if(i == 0)
+                        g.setColor(Color.orange);
+
+                    else if(i == 1)
+                        g.setColor(Color.yellow);
+
+                    else if(i == 2)
+                        g.setColor(Color.orange);
+
+                    else if(i == 3)
+                        g.setColor(Color.green);
+
+                    else if(i == 4)
+                        g.setColor(Color.red);
+
+                    else
+                        g.setColor(Color.magenta);
+
+
+                    g.fillRoundRect(
                             j * brickWidth + 80,
-                            i * brickHeight + 50,
+                            i * brickHeight + 120,
                             brickWidth,
-                            brickHeight
+                            brickHeight,
+                            15,
+                            15
                     );
 
                     // Brick border
                     g.setStroke(new BasicStroke(3));
-                    g.setColor(Color.black);
+                    g.setColor(Color.white);
 
-                    g.drawRect(
+                    g.drawRoundRect(
                             j * brickWidth + 80,
-                            i * brickHeight + 50,
+                            i * brickHeight + 120,
                             brickWidth,
-                            brickHeight
+                            brickHeight,
+                            15,
+                            15
                     );
                 }
             }
