@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.sound.sampled.*;
+import java.io.File;
 
 public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
@@ -110,11 +112,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             g2d.drawRoundRect(110,200,480,200,50,50);
 
             g.setColor(new Color(0,0,180));
-            g.setFont(new Font("Arial", Font.BOLD,36));
+            g.setFont(new Font("Arial", Font.BOLD,40));
 
             g.drawString("BRICK BREAKER",190,275);
 
-            g.setColor(Color.black);
+            g.setColor(Color.red);
             g.setFont(new Font("Arial", Font.BOLD,24));
 
             g.drawString("Press ENTER to Start",215,320);
@@ -223,6 +225,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                             totalBricks--;
 
                             score +=5;
+                            playSound("brick.wav");
                             if(score > highScore){
                                 highScore = score;
                             }
@@ -253,6 +256,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 ballYDir = 0;
 
                 gameOver = true;
+                playSound("gameover.wav");
             }
 
             // Level Complete Logic
@@ -264,6 +268,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 ballYDir = 0;
 
                 levelComplete = true;
+                playSound("levelcomplete.wav");
             }
         }
 
@@ -313,9 +318,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
                 gameOver = false;
 
-                score = 0;
-                level = 1;
-
                 play = true;
 
                 ballPosX = 120;
@@ -355,6 +357,29 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     public void moveLeft(){
 
         playerX -=35;
+    }
+
+    //sounds
+    public void playSound(String soundName){
+
+        try{
+
+            AudioInputStream audioInput =
+                    AudioSystem.getAudioInputStream(
+                            getClass().getResource("/sounds/" + soundName)
+                    );
+
+            Clip clip = AudioSystem.getClip();
+
+            clip.open(audioInput);
+
+            clip.start();
+
+        }
+        catch(Exception ex){
+
+            ex.printStackTrace();
+        }
     }
 
     public void keyReleased(KeyEvent e){}
