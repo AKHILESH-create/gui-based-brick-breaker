@@ -225,6 +225,17 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
                 gameOver = true;
             }
+
+            // Level Complete Logic
+            if(totalBricks <= 0){
+
+                play = false;
+
+                ballXDir = 0;
+                ballYDir = 0;
+
+                levelComplete = true;
+            }
         }
 
         repaint();
