@@ -10,6 +10,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private int highScore = 0;
     private boolean levelComplete = false;
     private boolean gameOver = false;
+    private boolean gameStarted = false;
     private int level = 1;
     private int totalBricks;
 
@@ -94,6 +95,30 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         // Ball
         g.setColor(Color.red);
         g.fillOval(ballPosX,ballPosY,30,30);
+
+        // START SCREEN
+        if(!gameStarted){
+
+            g.setColor(new Color(220,230,255));
+            g.fillRoundRect(140,220,420,170,50,50);
+
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setStroke(new BasicStroke(4));
+            g2d.setColor(Color.blue);
+
+            g2d.drawRoundRect(140,220,420,170,50,50);
+
+            g.setColor(new Color(0,0,180));
+            g.setFont(new Font("Arial", Font.BOLD,36));
+
+            g.drawString("BRICK BREAKER",180,285);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Calibri", Font.BOLD,24));
+
+            g.drawString("Press ENTER to Start",210,335);
+        }
 
 
         // WIN
@@ -262,7 +287,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         if(e.getKeyCode()==KeyEvent.VK_ENTER){
 
             // Start game for first time
-            if(!play && !gameOver && !levelComplete){
+            if(!gameStarted){
+
+                gameStarted = true;
 
                 play = true;
 
@@ -318,13 +345,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void moveRight(){
 
-        play = true;
         playerX +=35;
     }
 
     public void moveLeft(){
 
-        play = true;
         playerX -=35;
     }
 
