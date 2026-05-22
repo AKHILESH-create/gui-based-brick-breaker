@@ -130,50 +130,50 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
             // Level Complete popup background
             g.setColor(new Color(220,255,220));
-            g.fillRoundRect(140,220,420,170,50,50);
+            g.fillRoundRect(110,220,480,170,50,50);
 
             // Border
             Graphics2D g2d = (Graphics2D) g;
 
             g2d.setStroke(new BasicStroke(4));
             g2d.setColor(Color.green);
+            g2d.drawRoundRect(110,220,480,170,50,50);
 
-            g2d.drawRoundRect(140,220,420,170,50,50);
 
             // Text
             g.setColor(new Color(0,150,0));
             g.setFont(new Font("Arial", Font.BOLD,38));
 
-            g.drawString("LEVEL COMPLETE!",155,290);
+            g.drawString("LEVEL COMPLETE!",165,290);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Calibri", Font.BOLD,24));
+            g.setFont(new Font("Arial", Font.BOLD,24));
 
-            g.drawString("Press ENTER for Next Level",175,340);
+            g.drawString("Press ENTER for Next Level",185,340);
         }
 
         // GAME OVER POPUP
         if(gameOver){
 
             g.setColor(new Color(255,220,220));
-            g.fillRoundRect(140,220,420,170,50,50);
+            g.fillRoundRect(110,220,420,170,50,50);
 
             Graphics2D g2d = (Graphics2D) g;
 
             g2d.setStroke(new BasicStroke(4));
             g2d.setColor(Color.red);
 
-            g2d.drawRoundRect(140,220,420,170,50,50);
+            g2d.drawRoundRect(110,220,420,170,50,50);
 
             g.setColor(new Color(180,0,0));
             g.setFont(new Font("Arial", Font.BOLD,40));
 
-            g.drawString("GAME OVER",190,290);
+            g.drawString("GAME OVER",220,290);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Calibri", Font.BOLD,24));
+            g.setFont(new Font("Arial", Font.BOLD,24));
 
-            g.drawString("Press ENTER to Restart",185,340);
+            g.drawString("Press ENTER to Restart",190,340);
         }
         g.dispose();
     }
