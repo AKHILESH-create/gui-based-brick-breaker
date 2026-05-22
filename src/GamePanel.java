@@ -8,6 +8,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     private int score = 0;
     private int highScore = 0;
+    private boolean levelComplete = false;
+    private boolean gameOver = false;
     private int level = 1;
     private int totalBricks;
 
@@ -95,28 +97,55 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
 
         // WIN
-        if(totalBricks <= 0){
+        if(levelComplete){
 
-            level++;
-            startLevel();
+            // Level Complete popup background
+            g.setColor(new Color(220,255,220));
+            g.fillRoundRect(140,220,420,170,50,50);
+
+            // Border
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setStroke(new BasicStroke(4));
+            g2d.setColor(Color.green);
+
+            g2d.drawRoundRect(140,220,420,170,50,50);
+
+            // Text
+            g.setColor(new Color(0,150,0));
+            g.setFont(new Font("Arial", Font.BOLD,38));
+
+            g.drawString("LEVEL COMPLETE!",155,290);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Calibri", Font.BOLD,24));
+
+            g.drawString("Press ENTER for Next Level",175,340);
         }
 
-        // GAME OVER
-        if(ballPosY > 570){
+        // GAME OVER POPUP
+        if(gameOver){
 
-            play = false;
-            ballXDir = 0;
-            ballYDir = 0;
+            g.setColor(new Color(255,220,220));
+            g.fillRoundRect(140,220,420,170,50,50);
 
-            g.setColor(Color.red);
-            g.setFont(new Font("Calibri",Font.BOLD,30));
+            Graphics2D g2d = (Graphics2D) g;
 
-            g.drawString("Game Over",240,300);
+            g2d.setStroke(new BasicStroke(4));
+            g2d.setColor(Color.red);
 
-            g.setFont(new Font("Calibri",Font.BOLD,20));
-            g.drawString("Press Enter to Restart",220,350);
+            g2d.drawRoundRect(140,220,420,170,50,50);
+
+            g.setColor(new Color(180,0,0));
+            g.setFont(new Font("Arial", Font.BOLD,40));
+
+            g.drawString("GAME OVER",190,290);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Calibri", Font.BOLD,24));
+
+            g.drawString("Press ENTER to Restart",185,340);
         }
-
         g.dispose();
     }
 
@@ -185,6 +214,17 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
             if(ballPosX>640)
                 ballXDir=-ballXDir;
+
+            // Game Over Logic
+            if(ballPosY > 570){
+
+                play = false;
+
+                ballXDir = 0;
+                ballYDir = 0;
+
+                gameOver = true;
+            }
         }
 
         repaint();
@@ -208,25 +248,57 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 moveLeft();
         }
 
-        // Restart
         if(e.getKeyCode()==KeyEvent.VK_ENTER){
 
-            if(!play){
+            // Start game for first time
+            if(!play && !gameOver && !levelComplete){
 
-                play=true;
+                play = true;
 
-                ballPosX=120;
-                ballPosY=350;
+                ballPosX = 120;
+                ballPosY = 350;
 
-                ballXDir=-2;
-                ballYDir=-2;
+                ballXDir = -2;
+                ballYDir = -2;
 
-                playerX=310;
+                playerX = 310;
+
+                repaint();
+            }
+
+            // Restart after Game Over
+            else if(gameOver){
+
+                gameOver = false;
 
                 score = 0;
                 level = 1;
 
+                play = true;
+
+                ballPosX = 120;
+                ballPosY = 350;
+
+                ballXDir = -2;
+                ballYDir = -2;
+
+                playerX = 310;
+
                 startLevel();
+
+                repaint();
+            }
+
+            // Next level
+            else if(levelComplete){
+
+                levelComplete = false;
+
+                level++;
+
+                startLevel();
+
+                play = true;
 
                 repaint();
             }
