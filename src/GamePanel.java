@@ -100,24 +100,28 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         if(!gameStarted){
 
             g.setColor(new Color(220,230,255));
-            g.fillRoundRect(140,220,420,170,50,50);
+            g.fillRoundRect(110,200,480,200,50,50);
 
             Graphics2D g2d = (Graphics2D) g;
 
             g2d.setStroke(new BasicStroke(4));
             g2d.setColor(Color.blue);
 
-            g2d.drawRoundRect(140,220,420,170,50,50);
+            g2d.drawRoundRect(110,200,480,200,50,50);
 
             g.setColor(new Color(0,0,180));
             g.setFont(new Font("Arial", Font.BOLD,36));
 
-            g.drawString("BRICK BREAKER",180,285);
+            g.drawString("BRICK BREAKER",190,275);
 
             g.setColor(Color.black);
-            g.setFont(new Font("Calibri", Font.BOLD,24));
+            g.setFont(new Font("Arial", Font.BOLD,24));
 
-            g.drawString("Press ENTER to Start",210,335);
+            g.drawString("Press ENTER to Start",215,320);
+
+            g.setFont(new Font("Arial", Font.BOLD,20));
+
+            g.drawString("Use LEFT ← and RIGHT → keys to move paddle",125,360);
         }
 
 
