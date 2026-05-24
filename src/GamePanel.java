@@ -13,6 +13,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private boolean levelComplete = false;
     private boolean gameOver = false;
     private boolean gameStarted = false;
+    private boolean paused = false;
     private int level = 1;
     private int totalBricks;
 
@@ -118,7 +119,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
             g.drawString("BRICK BREAKER",190,275);
 
-            g.setColor(Color.red);
+            g.setColor(Color.black);
             g.setFont(new Font("Arial", Font.BOLD,24));
 
             g.drawString("Press ENTER to Start",215,320);
@@ -126,6 +127,30 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             g.setFont(new Font("Arial", Font.BOLD,20));
 
             g.drawString("Use LEFT ← and RIGHT → keys to move paddle",125,360);
+        }
+
+        // PAUSE POPUP
+        if(paused){
+
+            g.setColor(new Color(220,220,255));
+            g.fillRoundRect(140,220,420,170,50,50);
+
+            Graphics2D g2d = (Graphics2D) g;
+
+            g2d.setStroke(new BasicStroke(4));
+            g2d.setColor(Color.pink);
+
+            g2d.drawRoundRect(140,220,420,170,50,50);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD,36));
+
+            g.drawString("GAME PAUSED",205,290);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD,24));
+
+            g.drawString("Press R to Resume",215,340);
         }
 
 
@@ -172,7 +197,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             g.setColor(new Color(180,0,0));
             g.setFont(new Font("Arial", Font.BOLD,40));
 
-            g.drawString("GAME OVER",220,290);
+            g.drawString("GAME OVER",205,300);
 
             g.setColor(Color.black);
             g.setFont(new Font("Arial", Font.BOLD,24));
@@ -184,7 +209,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void actionPerformed(ActionEvent e){
 
-        if(play){
+        if(play && !paused){
 
             ballPosX += ballXDir;
             ballPosY += ballYDir;
@@ -298,6 +323,22 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 playerX=10;
             else
                 moveLeft();
+        }
+
+        // Pause game using P
+        if(e.getKeyCode()==KeyEvent.VK_P){
+
+            if(play){
+                paused = true;
+            }
+        }
+
+        // Resume game using R
+        if(e.getKeyCode()==KeyEvent.VK_R){
+
+            if(paused){
+                paused = false;
+            }
         }
 
         if(e.getKeyCode()==KeyEvent.VK_ENTER){
