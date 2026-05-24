@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.sound.sampled.*;
-import java.io.File;
+import java.io.*;
 
 public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
@@ -32,6 +32,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     //constructor
 
     public GamePanel() {
+
+        loadHighScore();
 
         startLevel();
 
@@ -175,7 +177,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             g.setColor(Color.black);
             g.setFont(new Font("Arial", Font.BOLD,24));
 
-            g.drawString("Press ENTER to Restart",190,340);
+            g.drawString("Press ENTER to Restart",185,350);
         }
         g.dispose();
     }
@@ -225,9 +227,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                             totalBricks--;
 
                             score +=5;
+
                             playSound("brick.wav");
+
                             if(score > highScore){
+
                                 highScore = score;
+
+                                saveHighScore();
                             }
 
                             ballYDir=-ballYDir;
@@ -318,6 +325,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
                 gameOver = false;
 
+                score = 0;     // Reset current score only
+
                 play = true;
 
                 ballPosX = 120;
@@ -381,6 +390,49 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             ex.printStackTrace();
         }
     }
+
+    public void saveHighScore(){
+
+        try{
+
+            BufferedWriter writer =
+                    new BufferedWriter(
+                            new FileWriter("highscore.txt"));
+
+            writer.write(String.valueOf(highScore));
+
+            writer.close();
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+        }
+    }
+
+    public void loadHighScore(){
+
+        try{
+
+            File file = new File("highscore.txt");
+
+            if(file.exists()){
+
+                BufferedReader reader =
+                        new BufferedReader(
+                                new FileReader(file));
+
+                highScore =
+                        Integer.parseInt(reader.readLine());
+
+                reader.close();
+            }
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+        }
+    }
+
 
     public void keyReleased(KeyEvent e){}
     public void keyTyped(KeyEvent e){}
