@@ -1,4 +1,6 @@
 import javax.swing.JFrame;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 public class Main {
 
@@ -8,12 +10,21 @@ public class Main {
 
         GamePanel gamePlay = new GamePanel();
 
-        obj.setBounds(10, 10, 700, 600);
+        Dimension screenSize =
+                Toolkit.getDefaultToolkit().getScreenSize();
+
+        obj.setSize(screenSize.width,screenSize.height);
+
         obj.setTitle("Brick Breaker Game");
-        obj.setResizable(false);
-        obj.setVisible(true);
+
+        obj.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        obj.setResizable(false);
+
         obj.add(gamePlay);
+
+        obj.setVisible(true);
     }
 }

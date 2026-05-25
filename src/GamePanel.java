@@ -5,6 +5,10 @@ import javax.sound.sampled.*;
 import java.io.*;
 
 public class GamePanel extends JPanel implements KeyListener, ActionListener {
+    private int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+    private int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+    private int paddleY;
 
     private boolean play = false;
     private boolean gameStarted = false;
@@ -64,28 +68,34 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         ballYDir = -2;
 
         playerX = 310;
+
+        paddleY = screenHeight - 120;
+
+        playerX = screenWidth/2 - 70;
+        ballPosX = screenWidth/2;
+        ballPosY = screenHeight - 250;
     }
 
     public void paint(Graphics g){
 
         // Main background
         g.setColor(Color.black);
-        g.fillRect(1,1,692,592);
+        g.fillRect(0,0,screenWidth,screenHeight);
 
         // Pink top information bar
         g.setColor(new Color(255,220,230));
-        g.fillRect(10,10,670,55);
+        g.fillRect(10,10,screenWidth-30,55);
 
         g.setColor(Color.gray);
 
         // Bottom line only
-        g.fillRect(20,580,650,3);
+        g.fillRect(20,screenHeight-70,screenWidth-50,3);
         // Draw bricks
         map.draw((Graphics2D)g);
 
         // Top information text
         g.setColor(Color.black);
-        g.setFont(new Font("Calibri", Font.BOLD,24));
+        g.setFont(new Font("Arial", Font.BOLD,24));
 
         g.drawString("Level : " + level,80,45);
 
@@ -96,7 +106,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
         // Paddle
         g.setColor(Color.green);
-        g.fillRoundRect(playerX,550,140,10,15,15);
+        g.fillRoundRect(playerX,paddleY,220,10,15,15);
 
         // Ball
         g.setColor(Color.red);
@@ -250,7 +260,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
             // paddle collision
             if(new Rectangle(ballPosX,ballPosY,30,30)
-                    .intersects(new Rectangle(playerX,550,140,10))){
+                    .intersects(new Rectangle(playerX,paddleY,220,10))){
 
                 ballYDir = -ballYDir;
             }
@@ -310,11 +320,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
             if(ballPosY<85)
                 ballYDir = -ballYDir;
 
-            if(ballPosX>640)
+            if(ballPosX > screenWidth-40)
                 ballXDir=-ballXDir;
 
             // Game Over Logic
-            if(ballPosY > 570){
+            if(ballPosY > screenHeight-80){
 
                 play = false;
 
@@ -345,8 +355,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
         if(e.getKeyCode()==KeyEvent.VK_RIGHT){
 
-            if(playerX >=530)
-                playerX = 530;
+            if(playerX >= screenWidth - 260)
+                playerX = screenWidth - 180;
             else
                 moveRight();
         }
@@ -449,12 +459,14 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
     public void moveRight(){
 
-        playerX +=35;
+        play = true;
+        playerX += 50;
     }
 
     public void moveLeft(){
 
-        playerX -=35;
+        play = true;
+        playerX -= 50;
     }
 
     //sounds

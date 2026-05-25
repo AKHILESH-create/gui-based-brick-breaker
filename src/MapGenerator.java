@@ -19,7 +19,7 @@ public class MapGenerator {
             }
         }
 
-        brickWidth = 540 / col;
+        brickWidth = 1000 / col;
         brickHeight = 150 / row;
     }
 
@@ -53,8 +53,11 @@ public class MapGenerator {
                         g.setColor(Color.magenta);
 
 
+                    int startX = (Toolkit.getDefaultToolkit().getScreenSize().width
+                            - (map[0].length * brickWidth))/2;
+
                     g.fillRoundRect(
-                            j * brickWidth + 80,
+                            j * brickWidth + startX,
                             i * brickHeight + 120,
                             brickWidth,
                             brickHeight,
@@ -67,7 +70,7 @@ public class MapGenerator {
                     g.setColor(Color.white);
 
                     g.drawRoundRect(
-                            j * brickWidth + 80,
+                            j * brickWidth + startX,
                             i * brickHeight + 120,
                             brickWidth,
                             brickHeight,
