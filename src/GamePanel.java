@@ -21,6 +21,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     private boolean paused = false;
     private int level = 1;
     private int totalBricks;
+    private int effectX = -100;
+    private int effectY = -100;
+    private int effectTimer = 0;
 
     private Timer timer;
     private int delay = 8;
@@ -64,8 +67,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         ballPosX = 120;
         ballPosY = 350;
 
-        ballXDir = -2;
-        ballYDir = -2;
+        ballXDir = -3;
+        ballYDir = -3;
 
         playerX = 310;
 
@@ -111,6 +114,24 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
         // Ball
         g.setColor(Color.red);
         g.fillOval(ballPosX,ballPosY,30,30);
+
+        // Brick break effect
+        if(effectTimer > 0){
+
+            g.setColor(Color.orange);
+
+            g.fillOval(effectX-15,effectY,8,8);
+            g.fillOval(effectX+15,effectY,8,8);
+
+            g.setColor(Color.yellow);
+
+            g.fillOval(effectX,effectY-15,8,8);
+            g.fillOval(effectX,effectY+15,8,8);
+
+            g.setColor(Color.white);
+
+            g.fillOval(effectX,effectY,10,10);
+        }
 
 
         // START SCREEN
@@ -293,6 +314,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
 
                             map.setBrickValue(0,i,j);
 
+                            // Store effect position
+                            effectX = brickX + map.brickWidth/2;
+                            effectY = brickY + map.brickHeight/2;
+                            effectTimer = 12;
+
                             totalBricks--;
 
                             score +=5;
@@ -346,6 +372,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 levelComplete = true;
                 playSound("levelcomplete.wav");
             }
+        }
+
+        if(effectTimer > 0){
+
+            effectTimer--;
         }
 
         repaint();
@@ -411,8 +442,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 ballPosX = 120;
                 ballPosY = 350;
 
-                ballXDir = -2;
-                ballYDir = -2;
+                ballXDir = -3;
+                ballYDir = -3;
 
                 playerX = 310;
 
@@ -431,8 +462,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
                 ballPosX = 120;
                 ballPosY = 350;
 
-                ballXDir = -2;
-                ballYDir = -2;
+                ballXDir = -3;
+                ballYDir = -3;
+
+
 
                 playerX = 310;
 
@@ -460,13 +493,13 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener {
     public void moveRight(){
 
         play = true;
-        playerX += 50;
+        playerX += 80;
     }
 
     public void moveLeft(){
 
         play = true;
-        playerX -= 50;
+        playerX -= 80;
     }
 
     //sounds
